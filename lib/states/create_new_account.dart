@@ -6,6 +6,7 @@ import 'package:notim/utility/my_constant.dart';
 import 'package:notim/utility/my_dialog.dart';
 import 'package:notim/widgets/show_buttom.dart';
 import 'package:notim/widgets/show_form.dart';
+import 'package:notim/widgets/show_google_map.dart';
 import 'package:notim/widgets/show_icon_buttom.dart';
 import 'package:notim/widgets/show_image.dart';
 import 'package:notim/widgets/show_prograss.dart';
@@ -144,7 +145,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
           margin: const EdgeInsets.symmetric(vertical: 16),
           decoration: MyConstant().curveBox(),
           width: 300,
-          height: 250,child: lat == null ? const ShowProgress() :Showtext(text: '$lat,$lng'),
+          height: 250,child: lat == null ? const ShowProgress() :ShowGoogleMap(lat: lat!, lng: lng!),
         ),
       ],
     );
