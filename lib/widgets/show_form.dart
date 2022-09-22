@@ -8,12 +8,14 @@ class ShowForm extends StatelessWidget {
   final IconData? iconData;
   final bool? obsecu;
   final Function()? redEyeFunction;
+  final Function(String) changFunc;
   const ShowForm({
     Key? key,
     required this.hint,
     this.iconData,
     this.obsecu,
     this.redEyeFunction,
+    required this.changFunc,
   }) : super(key: key);
 
   @override
@@ -22,10 +24,11 @@ class ShowForm extends StatelessWidget {
       height: 40,
       width: 250,
       margin: const EdgeInsets.only(top: 16),
-      child: TextFormField(
+      child: TextFormField(onChanged: changFunc,
         obscureText: obsecu ?? false,
         style: MyConstant().h3Style(),
-        decoration: InputDecoration( fillColor: Colors.white.withOpacity(0.75),
+        decoration: InputDecoration(
+          fillColor: Colors.white.withOpacity(0.75),
           filled: true,
           suffixIcon: redEyeFunction == null
               ? iconData == null

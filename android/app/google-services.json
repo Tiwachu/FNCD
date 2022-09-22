@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "986302216787",
+    "project_id": "notim-43da3",
+    "storage_bucket": "notim-43da3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986302216787:android:dd89b63709683cda7b64a6",
+        "android_client_info": {
+          "package_name": "com.tch1603.notim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986302216787-9acpp5i0dhbl52c24i0tehbgjc8v9s4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABxppzOhkb0zwOWcqcL-Zv1Fg_W821H50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986302216787-9acpp5i0dhbl52c24i0tehbgjc8v9s4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:notim/utility/my_constant.dart';
 import 'package:notim/utility/my_dialog.dart';
+import 'package:notim/utility/my_service.dart';
 import 'package:notim/widgets/show_buttom.dart';
 import 'package:notim/widgets/show_form.dart';
 import 'package:notim/widgets/show_google_map.dart';
@@ -21,6 +24,8 @@ class CreateNewAccount extends StatefulWidget {
 
 class _CreateNewAccountState extends State<CreateNewAccount> {
   double? lat, lng;
+  File? file;
+  String? name, email, password;
 
   @override
   void initState() {
@@ -86,9 +91,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
     lat = position.latitude;
     lng = position.longitude;
     print('lat===> $lat,lng==>>  $lng');
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -99,7 +102,9 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
         actions: [
           ShowIconButtom(
             iconData: Icons.cloud_upload,
-            pressFunc: () {},
+            pressFunc: () {
+              processCreateNewAccount();
+            },
           )
         ],
         centerTitle: true,
@@ -125,14 +130,7 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
     return ShowButtom(
       label: 'Create New Account',
       pressFunction: () {
-        // Mydialog(context: context).normolDialog(
-        //   title: 'title1234',
-        //   subTitle: 'subTitle12345',
-        //   lable: 'รู้แล้ว',
-        //   pressFunc: () {
-        //     print('pressFung ทำงาน');
-        //   },
-        // );
+        processCreateNewAccount();
       },
     );
   }
@@ -145,7 +143,10 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
           margin: const EdgeInsets.symmetric(vertical: 16),
           decoration: MyConstant().curveBox(),
           width: 300,
-          height: 250,child: lat == null ? const ShowProgress() :ShowGoogleMap(lat: lat!, lng: lng!),
+          height: 250,
+          child: lat == null
+              ? const ShowProgress()
+              : ShowGoogleMap(lat: lat!, lng: lng!),
         ),
       ],
     );
@@ -156,6 +157,9 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ShowForm(
+          changFunc: (p0) {
+            password = p0.trim();
+          },
           hint: 'Password',
           iconData: Icons.lock_clock_outlined,
         ),
@@ -168,6 +172,9 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ShowForm(
+          changFunc: (p0) {
+            email = p0.trim();
+          },
           hint: 'Email',
           iconData: Icons.email_outlined,
         ),
@@ -180,6 +187,9 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ShowForm(
+          changFunc: (p0) {
+            name = p0.trim();
+          },
           hint: 'name',
           iconData: Icons.fingerprint,
         ),
@@ -187,14 +197,81 @@ class _CreateNewAccountState extends State<CreateNewAccount> {
     );
   }
 
-  Container newAvata() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 16),
-      width: 200,
-      height: 200,
-      child: ShowImage(
-        path: 'images/avata.png',
-      ),
+  Row newAvata() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 16),
+          width: 200,
+          height: 200,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: file == null
+                    ? const ShowImage(
+                        path: 'images/avata.png',
+                      )
+                    : CircleAvatar(
+                        radius: 60,
+                        backgroundImage: FileImage(file!),
+                      ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: ShowIconButtom(
+                  iconData: Icons.add_a_photo,
+                  pressFunc: () {
+                    Mydialog(context: context).normolDialog(
+                      title: 'source imImage',
+                      subTitle: 'plese Camera or callery',
+                      lable: 'Gallary',
+                      pressFunc: () async {
+                        Navigator.pop(context);
+                        file = await MyService()
+                            .processTakePhoto(imageSource: ImageSource.gallery);
+                      },
+                      label2: 'Camara',
+                      pressFunc2: () async {
+                        Navigator.pop(context);
+                        file = await MyService()
+                            .processTakePhoto(imageSource: ImageSource.camera);
+                        setState(() {});
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
+  }
+
+  Future<void> processCreateNewAccount() async {
+    if (file == null) {
+      Mydialog(context: context)
+          .normolDialog(title: 'No Image', subTitle: 'Please Take Photo');
+    } else if ((name?.isEmpty ?? true) ||
+        (email?.isEmpty ?? true) ||
+        (password?.isEmpty ?? true)) {
+      Mydialog(context: context)
+          .normolDialog(title: 'มีช่่องว่า', subTitle: 'กรอกทุกช่อง');
+    } else {
+      //----------------------------------------------------------
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email!, password: password!)
+          .then((value) {
+        print('CreateAccount complte');
+      }).catchError((value) {
+        Mydialog(context: context)
+            .normolDialog(title: value.code, subTitle: value.message);
+      });
+      //-----------------------------------------------------------
+    }
+    ;
   }
 }

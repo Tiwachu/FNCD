@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notim/utility/my_constant.dart';
+import 'package:notim/widgets/show_buttom.dart';
 import 'package:notim/widgets/show_image.dart';
 import 'package:notim/widgets/show_text.dart';
 import 'package:notim/widgets/show_text_buttom.dart';
@@ -15,6 +16,8 @@ class Mydialog {
     required String subTitle,
     Function()? pressFunc,
     String? lable,
+    Function()? pressFunc2,
+    String? label2,
   }) {
     showDialog(
       context: context,
@@ -31,6 +34,9 @@ class Mydialog {
           subtitle: Showtext(text: subTitle),
         ),
         actions: [
+          label2 == null
+              ? const SizedBox()
+              : ShowTextButtom(label: label2, pressFunction: pressFunc2!),
           ShowTextButtom(
             label: lable ?? 'OK',
             pressFunction: pressFunc ??

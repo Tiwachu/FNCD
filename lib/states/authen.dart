@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notim/states/create_new_account.dart';
+import 'package:notim/states/main_mobile_user.dart';
 import 'package:notim/utility/my_constant.dart';
 import 'package:notim/widgets/show_buttom.dart';
 import 'package:notim/widgets/show_form.dart';
@@ -67,12 +68,19 @@ class _AuthenState extends State<Authen> {
   ShowButtom buttomLoin() {
     return ShowButtom(
       label: 'Login',
-      pressFunction: () {},
+      pressFunction: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MainMobileUser(),
+            ));
+      },
     );
   }
 
   ShowForm newPassword() {
     return ShowForm(
+      changFunc: (p0) {},
       hint: 'Password:',
       obsecu: redEye,
       redEyeFunction: () {
@@ -85,6 +93,7 @@ class _AuthenState extends State<Authen> {
 
   ShowForm newEmail() {
     return ShowForm(
+      changFunc: (p0) {},
       hint: 'Email:',
       iconData: Icons.drafts,
     );

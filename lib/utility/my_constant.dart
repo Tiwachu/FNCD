@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 
 class MyConstant {
+// Genernal
+ static String appName = 'TiwaTestApp';
+  
+
 //field
   static Color dart = Colors.black;
   static Color active = const Color.fromARGB(255, 177, 3, 61);
   static Color bgcolor = Color.fromARGB(255, 154, 239, 158);
 
+// Route
+  static String routeAuthen = '/Authen';
+  static String routeCreateNewAccount = '/CreateNewAccount';
+  static String routeMainMobileUser = 'MainMobileUser';
+  
 //method
 
   BoxDecoration curveBox() {
@@ -65,4 +74,7 @@ class MyConstant {
       fontWeight: FontWeight.normal,
     );
   }
+
+  @override
+  String toString() => 'MyConstant(appName: $appName)';
 }
